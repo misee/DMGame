@@ -1,6 +1,7 @@
 package dmServer;
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameEngine {
@@ -8,6 +9,7 @@ public class GameEngine {
     private static final int NUMBER_OF_PLAYERS = 2;
     public GameEngine() {
         cardReader = new CardReader();
+        players = new ArrayList<Player>();
     }
     public void register(String playerName, Set<Integer> cardIds) {
         Player player = new Player(playerName);
