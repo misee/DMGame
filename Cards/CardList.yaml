@@ -1,0 +1,17 @@
+# AVX starters
+---
+- card:             &id001
+    secondName:     Beast: Big Boy Blue
+    rarity:         starter
+    cost:           2M
+    affiliation:    x-men
+    max-dice:       4
+    DiceFaces:      {M, MM, MM, {0,1,2,B}, {0,2,3}, {1,2,4}}
+
+- card:             &id002
+    << *id001
+    secondName:     Beast: Genetic Expert
+    
+- card:             &id003
+    << *id001
+    secondName:     Beast: Mutate 666
