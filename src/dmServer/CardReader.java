@@ -3,6 +3,7 @@ package dmServer;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +14,17 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 
 import dmServer.Card.Affiliation;
 import dmServer.Card.Energy;
+import dmServer.Card.FaceIds;
 
 public class CardReader {
 
     public CardReader() {
-        allCards = new HashSet<Card>();
+        allCards = new HashMap<Integer, Card>();
         try {
             YamlReader reader = new YamlReader(new FileReader("Cards/CardList.yaml"));
             readListOfCards(reader);
-            //Object object = reader.read();
-            //System.out.println(object);
-            for (Card card : allCards) {
+
+            for (Card card : allCards.values()) {
                 System.out.println(card);
             }
             
@@ -45,15 +46,37 @@ public class CardReader {
         int cardId = Integer.parseInt((String)cardDetails.get("id"));
         String cardName = (String) cardDetails.get("name");
         int costNumber = Integer.parseInt((String)cardDetails.get("costNumber"));
-        List<Card.Energy> energies = new ArrayList<Card.Energy>();
+        List<Energy> energies = new ArrayList<Energy>();
         readEnergy((String)cardDetails.get("costEnergy"), energies);
-        Card.Affiliation affiliation = readAffiliation((String)cardDetails.get("affiliation"));
-        List<Face> faces = readDiceFaces();
-        allCards.add(new Card(cardId, cardName, costNumber, energies, affiliation));
+        Affiliation affiliation = readAffiliation((String)cardDetails.get("affiliation"));
+        Map<FaceIds, Face> faces = new HashMap<FaceIds, Face>();
+        readDiceFaces((Map)cardDetails.get("diceFaces"), faces);
+        allCards.put(cardId, new Card(cardName, costNumber, energies, affiliation, faces));
     }
-    private List<Face> readDiceFaces() {
-        // TODO Auto-generated method stub
-        return null;
+    private void readDiceFaces(Map diceFaces, Map<FaceIds, Face> faces) {
+        convertEnergyFace(FaceIds.energy1, "energy1", diceFaces, faces);
+        convertEnergyFace(FaceIds.energy2, "energy2", diceFaces, faces);
+        convertEnergyFace(FaceIds.energy3, "energy3", diceFaces, faces);
+        convertCharacterFace(FaceIds.level1, "level1", diceFaces, faces);
+        convertCharacterFace(FaceIds.level2, "level2", diceFaces, faces);
+        convertCharacterFace(FaceIds.level3, "level3", diceFaces, faces);
+    }
+    private void convertCharacterFace(FaceIds level, String diceFaceId, Map diceFaces, Map<FaceIds, Face> faces) {
+        List<String> characterFaces = (List<String>)diceFaces.get(diceFaceId);
+        int field = Integer.parseInt((String)characterFaces.get(0));
+        int attack = Integer.parseInt((String)characterFaces.get(1));
+        int defense = Integer.parseInt((String)characterFaces.get(2));
+        boolean burst = false;
+        if(characterFaces.size() > 3) {
+            burst = true;
+        }
+        faces.put(level, new Character(field, attack, defense, burst));
+        
+    }
+    private void convertEnergyFace(FaceIds energy, String diceFaceId, Map diceFaces, Map<FaceIds, Face> faces) {
+        List<Energy> energies = new ArrayList<Energy>();
+        readEnergy((String)diceFaces.get(diceFaceId), energies);
+        faces.put(energy, new EnergyFace(energies));
     }
     private Affiliation readAffiliation(String affiliation) {
         if(affiliation.equals("x_men")) {
@@ -64,7 +87,7 @@ public class CardReader {
         }
         return Affiliation.none;
     }
-    private void readEnergy(String energy, List<Card.Energy> energies) {
+    private void readEnergy(String energy, List<Energy> energies) {
         if(energy.equals("mask")) {
             energies.add(Energy.mask);
         }
@@ -105,7 +128,11 @@ public class CardReader {
         }
     }
     public Set<Card> getCards(Set<Integer> cardIds) {
-        return allCards;
+        Set<Card> returnedCards = new HashSet<Card>();
+        for (Integer cardId : cardIds) {
+           returnedCards.add(allCards.get(cardId));
+        }
+        return returnedCards;
     }
-    private Set<Card> allCards;
+    private Map<Integer, Card> allCards;
 }

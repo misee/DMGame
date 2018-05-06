@@ -13,7 +13,7 @@ public class EnergyFace implements Face {
     public String toString() {
         String returnValue = "";
         for (Energy energy : energies) {
-            returnValue.concat(energy.name());
+            returnValue = returnValue.concat(energy.name()).concat(" ");
         }
         return returnValue;
     }

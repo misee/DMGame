@@ -5,7 +5,13 @@
     costNumber:     2
     costEnergy:     mask
     affiliation:    x_men
-    diceFaces:      [mask, maskmask, maskmask, [0,1,2,burst], [0,2,3], [1,2,4]]
+    diceFaces:
+      energy1: mask
+      energy2: maskmask
+      energy3: maskmask
+      level1:  [0,1,2,burst]
+      level2:  [0,2,3]
+      level3: [1,2,4]
 
 - card:             &id002
     <<: *id001
