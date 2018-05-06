@@ -1,17 +1,18 @@
 # AVX starters
-- card:  &id001     # defines anchor label &id001
+- card:             &id001
     id:             1
-    secondName:     "Beast: Big Boy Blue"
-    cost:           2M
-    affiliation:    x-men
-    diceFaces:      [M, MM, MM, [0,1,2,B], [0,2,3], [1,2,4]]
+    name:           "Beast: Big Boy Blue"
+    costNumber:     2
+    costEnergy:     mask
+    affiliation:    x_men
+    diceFaces:      [mask, maskmask, maskmask, [0,1,2,burst], [0,2,3], [1,2,4]]
 
 - card:             &id002
     <<: *id001
     id:             2
-    secondName:     "Beast: Genetic Expert"
+    name:     "Beast: Genetic Expert"
 
 - card:             &id003
     <<: *id001
     id:             3
-    secondName:     "Beast: Mutate 666"
+    name:     "Beast: Mutate 666"
