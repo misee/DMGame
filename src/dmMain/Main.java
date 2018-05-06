@@ -1,4 +1,7 @@
-package dmServer;
+package dmMain;
+
+import dmClient.Client;
+import dmServer.GameEngine;
 
 public class Main {
 
@@ -8,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) {
         GameEngine engine = new GameEngine();
-        Player player1 = new Player("IronMan", engine);
-        Player player2 = new Player("Wolwerine", engine);
+        new Client("IronMan", engine);
+        new Client("Wolwerine", engine);
     }
 
 }
